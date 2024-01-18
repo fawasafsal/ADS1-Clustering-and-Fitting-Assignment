@@ -299,3 +299,79 @@ sns.scatterplot(x=x_embedded[:, 0], y=x_embedded[:, 1],
 plt.title("Netflix Movies and Tv Shows, Clustered (Autoencoder and Custom Keras Layer), Tf-idf with Plain Text")
 plt.savefig('output2.png')
 plt.show()
+
+from bokeh.models import ColumnDataSource, HoverTool, LinearColorMapper, CustomJS
+from bokeh.palettes import Category20
+from bokeh.transform import linear_cmap
+from bokeh.io import output_file, show
+from bokeh.transform import transform
+from bokeh.io import output_notebook
+from bokeh.plotting import figure
+from bokeh.layouts import column
+from bokeh.models import RadioButtonGroup
+from bokeh.models import TextInput
+from bokeh.layouts import gridplot
+from bokeh.models import Div
+from bokeh.models import Paragraph
+
+output_notebook()
+y_labels = y_pred
+
+# Data sources
+source = ColumnDataSource(data=dict(
+    x=x_embedded[:, 0],
+    y=x_embedded[:, 1],
+    x_backup=x_embedded[:, 0],
+    y_backup=x_embedded[:, 1],
+    desc=y_labels,
+    titles=df_netflix['title'],
+    directors=df_netflix['director'],
+    cast=df_netflix['cast'],
+    description=df_netflix['description'],
+    labels=["C-" + str(x) for x in y_labels]
+))
+
+# Hover over information
+hover = HoverTool(tooltips=[
+    ("Title", "@titles"),
+    ("Director(s)", "@directors"),
+    ("Cast", "@cast"),
+    ("Description", "@description"),
+],
+    point_policy="follow_mouse")
+
+# Map colors
+mapper = linear_cmap(field_name='desc',
+                     palette=Category20[20],
+                     low=min(y_labels), high=max(y_labels))
+
+# Prepare the figure
+p = figure(width=800, height=800,
+           tools=[hover, 'pan', 'wheel_zoom', 'box_zoom', 'reset'],
+           title="Netflix Movies and Tv Shows, Clustered(Autoencoder and custom Keras Layer), Tf-idf with Plain Text",
+           toolbar_location="right")
+
+# Plot
+p.scatter('x', 'y', size=5,
+          source=source,
+          fill_color=mapper,
+          line_alpha=0.3,
+          line_color="black")
+
+# Option
+option = RadioButtonGroup(labels=["C-0", "C-1", "C-2",
+                                  "C-3", "C-4", "C-5",
+                                  "C-6", "C-7", "C-8",
+                                  "C-9", "C-10", "C-11",
+                                  "C-12", "C-13", "C-14",
+                                  "C-15", "C-16", "C-17",
+                                  "C-18", "C-19", "All"],
+                          active=20)
+
+# Search box
+# keyword = TextInput(title="Search:", callback=keyword_callback)
+# Header
+header = Div(text="""<h1>Similar movies / tv shown in corresponding to Cluster</h1>""")
+
+# Show
+show(column(header, p))
