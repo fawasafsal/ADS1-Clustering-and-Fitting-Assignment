@@ -1,3 +1,16 @@
+from bokeh.models import Paragraph
+from bokeh.models import Div
+from bokeh.layouts import gridplot
+from bokeh.models import TextInput
+from bokeh.models import RadioButtonGroup
+from bokeh.layouts import column
+from bokeh.plotting import figure
+from bokeh.io import output_notebook
+from bokeh.transform import transform
+from bokeh.io import output_file, show
+from bokeh.transform import linear_cmap
+from bokeh.palettes import Category20
+from bokeh.models import ColumnDataSource, HoverTool, LinearColorMapper, CustomJS
 import pandas as pd
 import numpy as np
 from collections import Counter
@@ -300,19 +313,6 @@ plt.title("Netflix Movies and Tv Shows, Clustered (Autoencoder and Custom Keras 
 plt.savefig('output2.png')
 plt.show()
 
-from bokeh.models import ColumnDataSource, HoverTool, LinearColorMapper, CustomJS
-from bokeh.palettes import Category20
-from bokeh.transform import linear_cmap
-from bokeh.io import output_file, show
-from bokeh.transform import transform
-from bokeh.io import output_notebook
-from bokeh.plotting import figure
-from bokeh.layouts import column
-from bokeh.models import RadioButtonGroup
-from bokeh.models import TextInput
-from bokeh.layouts import gridplot
-from bokeh.models import Div
-from bokeh.models import Paragraph
 
 output_notebook()
 y_labels = y_pred
@@ -371,7 +371,8 @@ option = RadioButtonGroup(labels=["C-0", "C-1", "C-2",
 # Search box
 # keyword = TextInput(title="Search:", callback=keyword_callback)
 # Header
-header = Div(text="""<h1>Similar movies / tv shown in corresponding to Cluster</h1>""")
+header = Div(
+    text="""<h1>Similar movies / tv shown in corresponding to Cluster</h1>""")
 
 # Show
 show(column(header, p))
