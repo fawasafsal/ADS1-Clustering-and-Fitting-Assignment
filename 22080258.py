@@ -88,6 +88,15 @@ sns.set(style="whitegrid", palette="muted", color_codes=True)
 
 
 def autolabel(rects, axes):
+    """
+    Plots a bar graph to visualize the top % common actors and directors
+
+    Returns:
+        - data (DataFrame): A pandas dataframe containing columns:
+            'labels_actors' representing the names of the actors and
+            'most_common_directors' representing the directors names.
+        - Draws a plot
+    """
     for rect in rects:
         height = rect.get_height()
         axes.annotate('{}'.format(height),
@@ -114,6 +123,7 @@ rects1 = axes[1, 0].bar(top5_producer_countries.index,
 autolabel(rects1, axes[1, 0])
 
 # Bar chart of top 5 most common actors and directors
+
 rects2 = axes[1, 1].bar(labels_actors, values_actors, width, label='Actors')
 rects3 = axes[1, 1].bar(most_common_directors.index,
                         most_common_directors.values, width, label='Directors')
@@ -163,6 +173,22 @@ x = scaler.fit_transform(data)
 
 
 def autoencoder(dims, act='relu', init='glorot_uniform'):
+    """
+    Autoencoder Model Definition
+
+    This function defines an autoencoder model for clustering Netflix data. The autoencoder
+    is used to compress the input data and learn meaningful representations, which are
+    further utilized for clustering.
+
+    Parameters:
+    - dims (list): List of dimensions for each layer of the autoencoder.
+    - act (str): Activation function used in the layers.
+    - init (str): Weight initialization method.
+
+    Returns:
+    - autoencoder_model (tensorflow.keras.models.Model): Autoencoder model.
+    - encoder_model (tensorflow.keras.models.Model): Encoder model extracting encoded representations.
+    """
     n_stacks = len(dims) - 1
 
     input_data = Input(shape=(dims[0],), name='input')
